@@ -4,53 +4,110 @@
 //
 //  Created by Fernando Fontanive on 09/12/24.
 //
-
 import SwiftUI
 
-struct MealResponse: Codable {
-    var meals: [Meal]
+struct CategoryResponse: Codable {
+    var categories: [CategoryObject]
 }
 
-struct Meal: Codable {
-    var strMeal: String
+struct CategoryObject: Codable, Identifiable {
+    var id: String { idCategory }
+    var idCategory: String
     var strCategory: String
-    var strArea: String
-    var strInstructions: String
+    var strCategoryThumb: String
 }
 
 struct ContentView: View {
-    @State private var randomMeal: Meal? = nil
+    @State private var categoriesArray: [CategoryObject] = []
+    @State private var searchText: String = ""
+    
+    var filteredCategories: [CategoryObject] {
+        if searchText.isEmpty {
+            return categoriesArray
+        } else {
+            return categoriesArray.filter { $0.strCategory.localizedStandardContains(searchText) }
+        }
+    }
+    
+    let columnConfiguration = [
+        GridItem(.flexible(minimum: 180, maximum: 180), spacing: 20),
+        GridItem(.flexible(minimum: 180, maximum: 180), spacing: 20)
+    ]
     
     var body: some View {
-        VStack {
-            if let randomMeal = randomMeal {
-                Text(randomMeal.strMeal)
-                    .font(.largeTitle)
-                Text(randomMeal.strArea)
-                    .font(.title)
-                Text(randomMeal.strCategory)
-                    .font(.headline)
-                Text(randomMeal.strInstructions)
-                    .font(.caption)
-            } else {
-                Text("Loading meal...")
+        NavigationStack {
+            VStack {
+                
+                Divider()
+                ScrollView {
+                    LazyVGrid(columns: columnConfiguration, spacing: 8) {
+                        ForEach(filteredCategories) { categories in
+                            VStack(alignment: .leading) {
+                                ZStack {
+                                    VStack (alignment: .leading) {
+                                        ZStack {
+                                            AsyncImage(url: URL(string: categories.strCategoryThumb)) { returnedImage in
+                                                returnedImage.resizable()
+                                                    .scaledToFill()
+                                            } placeholder: {
+                                                Color.gray.opacity(0.3)
+                                            }
+                                            .frame(width: 175, height: 117)
+                                            .clipShape(.rect(cornerRadius: 8))
+                                            
+                                            LinearGradient(
+                                                gradient: Gradient(
+                                                    colors: [
+                                                        Color.clear.opacity(1),
+                                                        Color.gray.opacity(0.7)
+                                                    ]
+                                                ),
+                                                startPoint: .top,
+                                                endPoint: .bottom
+                                            )
+                                            .clipShape(.rect(cornerRadius: 8))
+                                            Text(categories.strCategory)
+                                                .fontWeight(.bold)
+                                                .foregroundStyle(.white)
+                                                .zIndex(1)
+                                                .padding(.horizontal, 8)
+                                                .padding(.top, 90)
+                                                .zIndex(2)
+                                                .frame(
+                                                    width: 175,
+                                                    alignment: .leading
+                                                )
+                                        }
+                                        .frame(width: 175, height: 117)
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            .navigationTitle("Categories")
+            .searchable(text: $searchText, prompt: "Search here")
+            
+            if categoriesArray.isEmpty {
+                Text("Loading category...")
             }
         }
-        .padding()
         .task {
             await loadData()
         }
     }
+    
     func loadData() async {
-        guard let url = URL(string: "https://www.themealdb.com/api/json/v1/1/random.php")
+        guard let url = URL(string: "https://www.themealdb.com/api/json/v1/1/categories.php")
         else {
             print("Error: invalid URL")
             return
         }
         do {
             let (data, _) = try await URLSession.shared.data(from: url)
-            if let decodedData = try? JSONDecoder().decode(MealResponse.self, from: data) {
-                randomMeal = decodedData.meals.first
+            if let decodedData = try? JSONDecoder().decode(CategoryResponse.self, from: data) {
+                categoriesArray = decodedData.categories
             }
         } catch {
             print("Invalid data")
