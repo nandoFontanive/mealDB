@@ -18,9 +18,21 @@ struct CategoryObject: Codable, Identifiable {
     var strCategoryThumb: String
 }
 
+struct RecipeResponse: Codable {
+    var meals: [RecipeObject]
+}
+
+struct RecipeObject: Codable, Identifiable {
+    var id: String { idMeal }
+    var idMeal: String
+    var strMeal: String
+    var strMealThumb: String
+}
+
 struct CategoriesView: View {
-    
     @State private var categoriesArray: [CategoryObject] = []
+    //    @State private var recipesArray: [RecipeObject] = []
+    @State private var selectedCategory: String? = nil
     @State private var searchText: String = ""
     
     var filteredCategories: [CategoryObject] {
@@ -42,46 +54,9 @@ struct CategoriesView: View {
                 Divider()
                 ScrollView {
                     LazyVGrid(columns: columnConfiguration, spacing: 8) {
-                        ForEach(filteredCategories) { categories in
-                            VStack(alignment: .leading) {
-                                ZStack {
-                                    VStack (alignment: .leading) {
-                                        ZStack {
-                                            AsyncImage(url: URL(string: categories.strCategoryThumb)) { returnedImage in
-                                                returnedImage.resizable()
-                                                    .scaledToFill()
-                                            } placeholder: {
-                                                Color.gray.opacity(0.3)
-                                            }
-                                            .frame(width: 175, height: 117)
-                                            .clipShape(.rect(cornerRadius: 8))
-                                            
-                                            LinearGradient(
-                                                gradient: Gradient(
-                                                    colors: [
-                                                        Color.clear.opacity(1),
-                                                        Color.gray.opacity(0.7)
-                                                    ]
-                                                ),
-                                                startPoint: .top,
-                                                endPoint: .bottom
-                                            )
-                                            .clipShape(.rect(cornerRadius: 8))
-                                            Text(categories.strCategory)
-                                                .fontWeight(.bold)
-                                                .foregroundStyle(.white)
-                                                .zIndex(1)
-                                                .padding(.horizontal, 8)
-                                                .padding(.top, 90)
-                                                .zIndex(2)
-                                                .frame(
-                                                    width: 175,
-                                                    alignment: .leading
-                                                )
-                                        }
-                                        .frame(width: 175, height: 117)
-                                    }
-                                }
+                        ForEach(filteredCategories) { category in
+                            NavigationLink(value: category.strCategory) {
+                                CategoryItemView(category: category)
                             }
                         }
                     }
@@ -92,17 +67,19 @@ struct CategoriesView: View {
             }
             .task {
                 await loadData()
-                
             }
             .navigationTitle("Categories")
-            .searchable(text: $searchText, prompt: "Search here")
+            .searchable(text: $searchText, prompt: "Search categories here")
+            .navigationDestination(for: String.self) { category in
+                RecipesListView(category: category)
+            }
         }
-        
     }
+    
     func loadData() async {
         guard let url = URL(string: "https://www.themealdb.com/api/json/v1/1/categories.php")
         else {
-            print("Error: invalid URL")
+            print("Error: could not load categories")
             return
         }
         do {
@@ -111,7 +88,7 @@ struct CategoriesView: View {
                 categoriesArray = decodedData.categories
             }
         } catch {
-            print("Invalid data")
+            print("Invalid categories data received")
         }
     }
 }
