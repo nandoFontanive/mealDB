@@ -7,6 +7,15 @@
 
 import SwiftUI
 
+struct CategoryRoute: Hashable {
+    let categoryName: String
+}
+
+struct RecipeRoute: Identifiable, Hashable {
+    let mealID: String
+    var id: String { mealID }
+}
+
 struct CategoryResponse: Codable {
     var categories: [CategoryObject]
 }
@@ -31,8 +40,6 @@ struct RecipeObject: Codable, Identifiable {
 
 struct CategoriesView: View {
     @State private var categoriesArray: [CategoryObject] = []
-    //    @State private var recipesArray: [RecipeObject] = []
-    @State private var selectedCategory: String? = nil
     @State private var searchText: String = ""
     
     var filteredCategories: [CategoryObject] {
@@ -55,8 +62,7 @@ struct CategoriesView: View {
                 ScrollView {
                     LazyVGrid(columns: columnConfiguration, spacing: 8) {
                         ForEach(filteredCategories) { category in
-                            NavigationLink(value: category.strCategory) {
-                                CategoryItemView(category: category)
+                            NavigationLink(value: CategoryRoute(categoryName: category.strCategory)) {                                CategoryItemView(category: category)
                             }
                         }
                     }
@@ -69,9 +75,9 @@ struct CategoriesView: View {
                 await loadData()
             }
             .navigationTitle("Categories")
-            .searchable(text: $searchText, prompt: "Search categories here")
-            .navigationDestination(for: String.self) { category in
-                RecipesListView(category: category)
+            .searchable(text: $searchText, prompt: "Search for categories here")
+            .navigationDestination(for: CategoryRoute.self) { route in
+                RecipesListView(category: route.categoryName)
             }
         }
     }
