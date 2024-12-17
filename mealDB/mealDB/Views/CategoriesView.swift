@@ -68,7 +68,7 @@ struct CategoriesView: View {
                     }
                 }
                 if categoriesArray.isEmpty {
-                    Text("Loading category...")
+                    ProgressView()
                 }
             }
             .task {

@@ -19,7 +19,56 @@ struct SingleRecipeObject: Codable, Identifiable {
     var strArea: String
     var strInstructions: String
     var strMealThumb: String
-    var strTags: String
+    var strTags: String?
+
+    var recipeIngredients: RecipeIngredients
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        idMeal = try container.decode(String.self, forKey: .idMeal)
+        strMeal = try container.decode(String.self, forKey: .strMeal)
+        strCategory = try container.decode(String.self, forKey: .strCategory)
+        strArea = try container.decode(String.self, forKey: .strArea)
+        strInstructions = try container.decode(String.self, forKey: .strInstructions)
+        strMealThumb = try container.decode(String.self, forKey: .strMealThumb)
+        strTags = try container.decodeIfPresent(String.self, forKey: .strTags)
+
+        recipeIngredients = try RecipeIngredients(from: decoder)
+    }
+
+    enum CodingKeys: String, CodingKey {
+        case idMeal, strMeal, strCategory, strArea, strInstructions, strMealThumb, strTags
+    }
+}
+
+struct RecipeIngredients: Decodable {
+    var ingredients: [(ingredient: String, measure: String)] = []
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CustomCodingKeys.self)
+        
+        for index in 1...20 {
+            let ingredientKey = "strIngredient\(index)"
+            let measureKey = "strMeasure\(index)"
+            
+            let ingredient = try container.decodeIfPresent(String.self, forKey: CustomCodingKeys(stringValue: ingredientKey))
+            let measure = try container.decodeIfPresent(String.self, forKey: CustomCodingKeys(stringValue: measureKey))
+            
+            if let ingredient = ingredient, !ingredient.trimmingCharacters(in: .whitespaces).isEmpty,
+               let measure = measure, !measure.trimmingCharacters(in: .whitespaces).isEmpty {
+                ingredients.append((ingredient, measure))
+            }
+        }
+    }
+    
+    struct CustomCodingKeys: CodingKey {
+        var stringValue: String
+        init(stringValue: String) {
+            self.stringValue = stringValue
+        }
+        var intValue: Int? { return nil }
+        init?(intValue: Int) { return nil }
+    }
 }
 
 struct SingleRecipeView: View {
@@ -32,10 +81,7 @@ struct SingleRecipeView: View {
         NavigationView {
             Group {
                 if let singleRecipe = singleRecipe {
-                    ScrollView {
                         VStack {
-                            Text("Recipe")
-                            
                             Divider()
                             
                             AsyncImage(url: URL(string: singleRecipe.strMealThumb)) { returnedSingleRecipeImage in
@@ -49,18 +95,55 @@ struct SingleRecipeView: View {
                             .clipShape(RoundedRectangle(cornerRadius: 8))
                             .padding()
                             
-                            Text("\(singleRecipe.strMeal) Details")
-                                .font(.headline)
+                            VStack {
+                                HStack {
+                                    Text("\(singleRecipe.strMeal)")
+                                        .font(.callout)
+                                    Spacer()
+                                    Image(systemName: "heart")
+                                }
                                 .padding()
-                            
-                            Text(singleRecipe.strInstructions)
-                                .font(.body)
-                                .padding()
-                        }
+                                
+                                List {
+                                    Section("Ingredients") {
+                                        ForEach(singleRecipe.recipeIngredients.ingredients.indices, id: \.self) { index in
+                                            HStack {
+                                                Text(singleRecipe.recipeIngredients.ingredients[index].ingredient)
+                                                    .foregroundColor(.primary)
+                                                Spacer()
+                                                Text(singleRecipe.recipeIngredients.ingredients[index].measure)
+                                                    .foregroundColor(.secondary)
+                                            }
+                                            .padding(.vertical, 2)
+                                        }
+                                    }
+
+
+                                    Section("Procedure") {
+                                        let instructionSteps = singleRecipe.strInstructions.components(separatedBy: "\r\n")
+                                        ForEach(Array(instructionSteps.filter { !$0.isEmpty }.enumerated()), id: \.element) { numberList, step in
+                                            HStack(alignment: .top, spacing: 10) {
+                                                Text("\(numberList + 1)")
+                                                    .font(.caption)
+                                                    .fontWeight(.bold)
+                                                    .foregroundColor(.white)
+                                                    .frame(width: 24, height: 24)
+                                                    .background(Color.gray)
+                                                    .clipShape(RoundedRectangle(cornerRadius: 6))
+                                                
+                                                Text(step)
+                                                    .font(.body)
+                                                    .foregroundColor(.primary)
+                                            }
+                                            .padding(.vertical, 5)
+                                        }
+                                    }
+                                }
+                            }
                     }
                 }
                 else {
-                    Text("Loading...")
+                    ProgressView()
                         .onAppear {
                             Task {
                                 await loadSingleRecipe()
@@ -101,4 +184,8 @@ struct SingleRecipeView: View {
             print("Invalid single recipe data received")
         }
     }
+}
+
+#Preview {
+    SingleRecipeView(selectedSingleRecipe: "52772")
 }
