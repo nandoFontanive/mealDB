@@ -72,29 +72,13 @@ struct CategoriesView: View {
                 }
             }
             .task {
-                await loadData()
+                categoriesArray = await RecipeService.loadCategoriesFromAPI()
             }
             .navigationTitle("Categories")
             .searchable(text: $searchText, prompt: "Search for categories here")
             .navigationDestination(for: CategoryRoute.self) { route in
                 RecipesListView(category: route.categoryName)
             }
-        }
-    }
-    
-    func loadData() async {
-        guard let url = URL(string: "https://www.themealdb.com/api/json/v1/1/categories.php")
-        else {
-            print("Error: could not load categories")
-            return
-        }
-        do {
-            let (data, _) = try await URLSession.shared.data(from: url)
-            if let decodedData = try? JSONDecoder().decode(CategoryResponse.self, from: data) {
-                categoriesArray = decodedData.categories
-            }
-        } catch {
-            print("Invalid categories data received")
         }
     }
 }

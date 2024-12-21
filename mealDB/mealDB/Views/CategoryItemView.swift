@@ -46,7 +46,3 @@ struct CategoryItemView: View {
             }
     }
 }
-
-//#Preview {
-//    CategoryItemView()
-//}
