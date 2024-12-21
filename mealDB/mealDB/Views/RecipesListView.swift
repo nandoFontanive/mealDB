@@ -36,26 +36,11 @@ struct RecipesListView: View {
         .navigationTitle(category)
         .onAppear {
             Task {
-                await loadRecipeList()
+                recipesArray = await RecipeService.loadRecipeListFromAPI(for: category)
             }
         }
         .sheet(item: $selectedRecipe) { route in
             SingleRecipeView(selectedSingleRecipe: route.mealID)
-        }
-    }
-    func loadRecipeList() async {
-        guard let urlRecipeList = URL(string: "https://www.themealdb.com/api/json/v1/1/filter.php?c=\(category)")
-        else {
-            print("Error: could not load recipes list by category")
-            return
-        }
-        do {
-            let (data, _) = try await URLSession.shared.data(from: urlRecipeList)
-            if let decodedData = try? JSONDecoder().decode(RecipeResponse.self, from: data) {
-                recipesArray = decodedData.meals
-            }
-        } catch {
-            print("Invalid recipes data received")
         }
     }
 }

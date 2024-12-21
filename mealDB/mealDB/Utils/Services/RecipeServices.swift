@@ -1,0 +1,45 @@
+//
+//  RecipeServices.swift
+//  mealDB
+//
+//  Created by Fernando Fontanive on 21/12/24.
+//
+
+import Foundation
+import SwiftUI
+
+struct RecipeService {
+    static func loadCategoriesFromAPI() async -> [CategoryObject] {
+        guard let url = URL(string: "https://www.themealdb.com/api/json/v1/1/categories.php")
+        else {
+            print("Error: could not load categories")
+            return []
+        }
+        do {
+            let (data, _) = try await URLSession.shared.data(from: url)
+            if let decodedData = try? JSONDecoder().decode(CategoryResponse.self, from: data) {
+                return decodedData.categories
+            }
+        } catch {
+            print("Invalid categories data received")
+        }
+        return []
+    }
+    
+    static func loadRecipeListFromAPI(for category: String) async -> [RecipeObject] {
+        guard let urlRecipeList = URL(string: "https://www.themealdb.com/api/json/v1/1/filter.php?c=\(category)")
+        else {
+            print("Error: could not load recipes list by category")
+            return []
+        }
+        do {
+            let (data, _) = try await URLSession.shared.data(from: urlRecipeList)
+            if let decodedData = try? JSONDecoder().decode(RecipeResponse.self, from: data) {
+                return decodedData.meals
+            }
+        } catch {
+            print("Invalid recipes data received")
+        }
+        return []
+    }
+}

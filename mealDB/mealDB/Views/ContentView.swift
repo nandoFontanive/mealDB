@@ -4,6 +4,7 @@
 //
 //  Created by Fernando Fontanive on 09/12/24.
 //
+
 import SwiftUI
 
 struct ContentView: View {
@@ -29,14 +30,6 @@ struct ContentView: View {
                 }
         }
         .tint(.orange)
-    }
-    
-    private func customizeTabBarAppearance() {
-        let appearance = UITabBarAppearance()
-        appearance.configureWithOpaqueBackground()
-        appearance.backgroundColor = UIColor.white // Define o fundo branco
-        UITabBar.appearance().standardAppearance = appearance
-        UITabBar.appearance().scrollEdgeAppearance = appearance
     }
 }
 
