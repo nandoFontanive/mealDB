@@ -5,6 +5,7 @@
 //  Created by Fernando Fontanive on 21/12/24.
 //
 
+import Foundation
 import UIKit
 
 func customizeTabBarAppearance() {

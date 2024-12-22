@@ -7,37 +7,6 @@
 
 import SwiftUI
 
-struct CategoryRoute: Hashable {
-    let categoryName: String
-}
-
-struct RecipeRoute: Identifiable, Hashable {
-    let mealID: String
-    var id: String { mealID }
-}
-
-struct CategoryResponse: Codable {
-    var categories: [CategoryObject]
-}
-
-struct CategoryObject: Codable, Identifiable {
-    var id: String { idCategory }
-    var idCategory: String
-    var strCategory: String
-    var strCategoryThumb: String
-}
-
-struct RecipeResponse: Codable {
-    var meals: [RecipeObject]
-}
-
-struct RecipeObject: Codable, Identifiable {
-    var id: String { idMeal }
-    var idMeal: String
-    var strMeal: String
-    var strMealThumb: String
-}
-
 struct CategoriesView: View {
     @State private var categoriesArray: [CategoryObject] = []
     @State private var searchText: String = ""
