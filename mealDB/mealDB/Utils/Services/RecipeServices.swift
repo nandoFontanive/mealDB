@@ -42,4 +42,21 @@ struct RecipeService {
         }
         return []
     }
+    
+    static func loadSingleRecipe(for selectedSingleRecipe: String) async -> SingleRecipeObject? {
+        guard let urlSingleRecipe = URL(string: "https://www.themealdb.com/api/json/v1/1/lookup.php?i=\(selectedSingleRecipe)")
+        else {
+            print("Error: could not load single recipe data")
+            return nil
+        }
+        do {
+            let (data, _) = try await URLSession.shared.data(from: urlSingleRecipe)
+            if let decodedData = try? JSONDecoder().decode(SingleRecipeResponse.self, from: data) {
+                return decodedData.meals.first
+            }
+        } catch {
+            print("Invalid single recipe data received")
+        }
+        return nil
+    }
 }
