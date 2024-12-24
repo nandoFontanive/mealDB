@@ -8,10 +8,11 @@
 import SwiftUI
 
 struct RecipesListView: View {
-    let category: String
-    
+    @EnvironmentObject var favorites: Favorites
     @State private var selectedRecipe: RecipeRoute? = nil
     @State private var recipesArray: [RecipeObject] = []
+    
+    let category: String
     
     var body: some View {
         List(recipesArray) { recipe in
@@ -30,6 +31,18 @@ struct RecipesListView: View {
                     .clipShape(RoundedRectangle(cornerRadius: 8))
                     Text(recipe.strMeal)
                         .font(.headline)
+                    
+                    Spacer()
+                    
+                    Image(systemName: favorites.contains(recipe.idMeal) ? "heart.fill" : "heart")
+                        .foregroundStyle(.red)
+                        .onTapGesture {
+                            if favorites.contains(recipe.idMeal) {
+                                favorites.remove(recipe.idMeal)
+                            } else {
+                                favorites.add(recipe.idMeal)
+                            }
+                        }
                 }
             }
         }

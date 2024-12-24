@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct ContentView: View {
+    @StateObject private var favorites = Favorites()
+    
     init() {
         customizeTabBarAppearance()
     }
@@ -30,6 +32,7 @@ struct ContentView: View {
                 }
         }
         .tint(.orange)
+        .environmentObject(favorites)
     }
 }
 

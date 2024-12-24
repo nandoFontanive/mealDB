@@ -8,9 +8,10 @@
 import SwiftUI
 
 struct SingleRecipeView: View {
+    @EnvironmentObject var favorites: Favorites
     @Environment(\.dismiss) var dismissSingleRecipeView
+    
     @State private var singleRecipe: SingleRecipeObject? = nil
-    @State private var isFavorite: Bool = false
     
     let selectedSingleRecipe: String
     
@@ -37,10 +38,17 @@ struct SingleRecipeView: View {
                                 Text("\(singleRecipe.strMeal)")
                                     .font(.callout)
                                 Spacer()
-                                Button("", systemName: "heart") {
-                                    isFavorite.toggle()
+                                
+                                Button {
+                                    if favorites.contains(singleRecipe.idMeal) {
+                                        favorites.remove(singleRecipe.idMeal)
+                                    } else {
+                                        favorites.add(singleRecipe.idMeal)
+                                    }
+                                } label: {
+                                    Image(systemName: favorites.contains(singleRecipe.idMeal) ? "heart.fill" : "heart" )
+                                        .foregroundStyle(.red)
                                 }
-                                Image(systemName: "heart")
                             }
                             .padding()
                             
