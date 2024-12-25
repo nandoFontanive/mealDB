@@ -33,6 +33,11 @@ struct ContentView: View {
         }
         .tint(.orange)
         .environmentObject(favorites)
+        .onAppear {
+            Task {
+                await favorites.reloadFavoritedRecipes()
+            }
+        }
     }
 }
 
