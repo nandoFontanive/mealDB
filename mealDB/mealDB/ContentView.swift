@@ -31,7 +31,7 @@ struct ContentView: View {
                     Label("Favorites", systemImage: "heart.fill")
                 }
         }
-        .tint(.orange)
+        .tint(.appOrange)
         .foregroundStyle(.black)
         .environmentObject(favorites)
         .onAppear {

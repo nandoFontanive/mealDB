@@ -20,8 +20,8 @@ struct CategoryItemView: View {
                     } placeholder: {
                         Color.gray.opacity(0.3)
                     }
-                    .frame(width: 175, height: 117)
-                    .clipShape(RoundedRectangle(cornerRadius: 8))
+                    .frame(width: AppSizes.categoryCardSize.width, height: AppSizes.categoryCardSize.height)
+                    .clipShape(RoundedRectangle(cornerRadius: CornerRadiusConfiguration.normalCornerRadius))
                     
                     LinearGradient(
                         gradient: Gradient(
@@ -34,15 +34,15 @@ struct CategoryItemView: View {
                         endPoint: .bottom
                     )
                     
-                    .clipShape(RoundedRectangle(cornerRadius: 8))
+                    .clipShape(RoundedRectangle(cornerRadius: CornerRadiusConfiguration.normalCornerRadius))
                     Text(category.strCategory)
                         .fontWeight(.bold)
                         .foregroundStyle(.white)
-                        .padding(.horizontal, 8)
+                        .padding(.horizontal, AppSizes.paddingSmall)
                         .padding(.top, 90)
-                        .frame(width: 175, alignment: .leading)
+                        .frame(width: AppSizes.categoryCardSize.width, alignment: .leading)
                 }
-                .frame(width: 175, height: 117)
+                .frame(width: AppSizes.categoryCardSize.width, height: AppSizes.categoryCardSize.height)
             }
     }
 }
