@@ -29,8 +29,8 @@ struct SingleRecipeView: View {
                         } placeholder: {
                             Color.gray.opacity(0.3)
                         }
-                        .frame (height: 175)
-                        .clipShape(RoundedRectangle(cornerRadius: 8))
+                        .frame (height: AppSizes.imageLarge)
+                        .clipShape(RoundedRectangle(cornerRadius: CornerRadiusConfiguration.normalCornerRadius))
                         .padding()
                         
                         VStack {
@@ -47,7 +47,7 @@ struct SingleRecipeView: View {
                                     }
                                 } label: {
                                     Image(systemName: favorites.contains(singleRecipe.idMeal) ? "heart.fill" : "heart" )
-                                        .foregroundStyle(.orange)
+                                        .foregroundStyle(.appOrange)
                                 }
                             }
                             .padding()
@@ -62,7 +62,7 @@ struct SingleRecipeView: View {
                                             Text(singleRecipe.recipeIngredients.ingredients[index].measure)
                                                 .foregroundColor(.secondary)
                                         }
-                                        .padding(.vertical, 2)
+                                        .padding(.vertical, AppSizes.paddingTiny)
                                     }
                                 }
                                 
@@ -72,18 +72,13 @@ struct SingleRecipeView: View {
                                     ForEach(Array(instructionSteps.filter { !$0.isEmpty }.enumerated()), id: \.element) { numberList, step in
                                         HStack(alignment: .top, spacing: 10) {
                                             Text("\(numberList + 1)")
-                                                .font(.caption)
-                                                .fontWeight(.bold)
-                                                .foregroundColor(.white)
-                                                .frame(width: 24, height: 24)
-                                                .background(Color.gray)
-                                                .clipShape(RoundedRectangle(cornerRadius: 6))
+                                                .whiteNumberedSquare()
                                             
                                             Text(step)
                                                 .font(.body)
-                                                .foregroundColor(.primary)
+                                                .foregroundColor(Color.appPrimaryColor)
                                         }
-                                        .padding(.vertical, 5)
+                                        .padding(.vertical, AppSizes.paddingTiny)
                                     }
                                 }
                             }

@@ -27,15 +27,15 @@ struct RecipesListView: View {
                     } placeholder: {
                         Color.gray.opacity(0.3)
                     }
-                    .frame(width: 80, height: 80)
-                    .clipShape(RoundedRectangle(cornerRadius: 8))
+                    .frame(width: AppSizes.imageMedium, height: AppSizes.imageMedium)
+                    .clipShape(RoundedRectangle(cornerRadius: CornerRadiusConfiguration.normalCornerRadius))
                     Text(recipe.strMeal)
                         .font(.headline)
                     
                     Spacer()
                     
                     Image(systemName: favorites.contains(recipe.idMeal) ? "heart.fill" : "heart")
-                        .foregroundStyle(.orange)
+                        .foregroundStyle(.appOrange)
                         .onTapGesture {
                             if favorites.contains(recipe.idMeal) {
                                 favorites.remove(recipe.idMeal)

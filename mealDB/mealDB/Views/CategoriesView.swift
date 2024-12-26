@@ -19,17 +19,12 @@ struct CategoriesView: View {
         }
     }
     
-    let columnConfiguration = [
-        GridItem(.flexible(minimum: 180, maximum: 180), spacing: 10),
-        GridItem(.flexible(minimum: 180, maximum: 180), spacing: 10)
-    ]
-    
     var body: some View {
         NavigationStack {
             VStack {
                 Divider()
                 ScrollView {
-                    LazyVGrid(columns: columnConfiguration, spacing: 8) {
+                    LazyVGrid(columns: ColumnConfiguration.categoryColumnConfiguration, spacing: AppSizes.paddingSmall) {
                         ForEach(filteredCategories) { category in
                             NavigationLink(value: CategoryRoute(categoryName: category.strCategory)) {                                CategoryItemView(category: category)
                             }
