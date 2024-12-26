@@ -47,7 +47,7 @@ struct SingleRecipeView: View {
                                     }
                                 } label: {
                                     Image(systemName: favorites.contains(singleRecipe.idMeal) ? "heart.fill" : "heart" )
-                                        .foregroundStyle(.red)
+                                        .foregroundStyle(.orange)
                                 }
                             }
                             .padding()

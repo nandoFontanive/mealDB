@@ -35,7 +35,7 @@ struct RecipesListView: View {
                     Spacer()
                     
                     Image(systemName: favorites.contains(recipe.idMeal) ? "heart.fill" : "heart")
-                        .foregroundStyle(.red)
+                        .foregroundStyle(.orange)
                         .onTapGesture {
                             if favorites.contains(recipe.idMeal) {
                                 favorites.remove(recipe.idMeal)

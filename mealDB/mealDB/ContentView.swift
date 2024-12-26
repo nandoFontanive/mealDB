@@ -32,6 +32,7 @@ struct ContentView: View {
                 }
         }
         .tint(.orange)
+        .foregroundStyle(.black)
         .environmentObject(favorites)
         .onAppear {
             Task {

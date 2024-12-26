@@ -24,7 +24,7 @@ struct FavoritesView: View {
                     } placeholder: {
                         Color.gray.opacity(0.3)
                     }
-                    .frame(width: 80, height: 80)
+                    .frame(width: 48, height: 48)
                     .clipShape(RoundedRectangle(cornerRadius: 8))
                     
                     Text(recipe.strMeal)
@@ -33,7 +33,7 @@ struct FavoritesView: View {
                     Spacer()
                     
                     Image(systemName: favorites.contains(recipe.idMeal) ? "heart.fill" : "heart")
-                        .foregroundStyle(.red)
+                        .foregroundStyle(.orange)
                         .onTapGesture {
                             if favorites.contains(recipe.idMeal) {
                                 favorites.remove(recipe.idMeal)
