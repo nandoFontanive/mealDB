@@ -8,7 +8,6 @@
 import Foundation
 import SwiftUI
 
-
 class Favorites: ObservableObject {
     @Published private var recipeIDs: Set<String> = []
     @Published var favoriteRecipes: [RecipeObject] = []

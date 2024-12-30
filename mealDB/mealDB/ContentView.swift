@@ -21,7 +21,7 @@ struct ContentView: View {
                     Label("Categories", systemImage: "square.grid.2x2.fill")
                 }
             
-            RecipesListView(category: "Seafood")
+            RecipesListView(category: "Miscellaneous")
                 .tabItem {
                     Label("Recipes", systemImage: "fork.knife")
                 }
