@@ -10,10 +10,19 @@ import SwiftUI
 struct FavoritesView: View {
     @EnvironmentObject var favorites: Favorites
     @State private var selectedRecipe: RecipeRoute? = nil
+    @State private var searchText: String = ""
+    
+    var filteredFavorites: [RecipeObject] {
+        if searchText.isEmpty {
+            return favorites.favoriteRecipes
+        } else {
+            return favorites.favoriteRecipes.filter { $0.strMeal.localizedStandardContains(searchText) }
+        }
+    }
     
     var body: some View {
         NavigationStack {
-            List(favorites.favoriteRecipes, id: \.idMeal) { recipe in
+            List(filteredFavorites, id: \.idMeal) { recipe in
                 Button(action: {
                     selectedRecipe = RecipeRoute(mealID: recipe.idMeal)
                 }) {
@@ -54,6 +63,7 @@ struct FavoritesView: View {
                 SingleRecipeView(selectedSingleRecipe: route.mealID)
             }
             .navigationTitle("Favorites")
+            .searchable(text: $searchText, prompt: "Search for favorited recipes here")
         }
     }
 }
