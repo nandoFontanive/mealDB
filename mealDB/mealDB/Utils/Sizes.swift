@@ -15,17 +15,23 @@ struct AppSizes {
     static let imageLarge: CGFloat = 175
     
     static let categoryCardSize = CGSize(width: 175, height: 120)
+    static let categoryLargerCardSize = CGSize(width: 360, height: 175)
     
     static let paddingTiny: CGFloat = 2
     static let paddingSmall: CGFloat = 8
     static let paddingMedium: CGFloat = 16
     static let paddingLarge: CGFloat = 20
+    static let paddingHuge: CGFloat = 90
 }
 
 struct ColumnConfiguration {
     static let categoryColumnConfiguration = [
         GridItem(.flexible(minimum: 180, maximum: 180), spacing: 10),
         GridItem(.flexible(minimum: 180, maximum: 180), spacing: 10)
+    ]
+    
+    static let singleColumnConfiguration = [
+        GridItem(.fixed(AppSizes.categoryLargerCardSize.width))
     ]
 }
 
