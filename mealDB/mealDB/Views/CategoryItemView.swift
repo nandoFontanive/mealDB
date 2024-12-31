@@ -37,9 +37,9 @@ struct CategoryItemView: View {
                     .clipShape(RoundedRectangle(cornerRadius: CornerRadiusConfiguration.normalCornerRadius))
                     Text(category.strCategory)
                         .fontWeight(.bold)
-                        .foregroundStyle(.white)
+                        .foregroundStyle(Color.appBackgroundcolor)
                         .padding(.horizontal, AppSizes.paddingSmall)
-                        .padding(.top, 90)
+                        .padding(.top, AppSizes.paddingHuge)
                         .frame(width: AppSizes.categoryCardSize.width, alignment: .leading)
                 }
                 .frame(width: AppSizes.categoryCardSize.width, height: AppSizes.categoryCardSize.height)

@@ -41,7 +41,7 @@ struct CategoriesView: View {
             .navigationTitle("Categories")
             .searchable(text: $searchText, prompt: "Search for categories here")
             .navigationDestination(for: CategoryRoute.self) { route in
-                RecipesListView(category: route.categoryName)
+                CategoryRecipesView(category: route.categoryName)
             }
         }
     }
