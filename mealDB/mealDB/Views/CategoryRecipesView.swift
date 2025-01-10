@@ -12,6 +12,7 @@ struct CategoryRecipesView: View {
     @State private var recipesArray: [RecipeObject] = []
     
     let category: String
+    let service = RecipeService()
     
     var body: some View {
             VStack {
@@ -28,7 +29,7 @@ struct CategoryRecipesView: View {
             .navigationTitle(category)
             .navigationBarTitleDisplayMode(.inline)
             .task {
-                recipesArray = await RecipeService.loadRecipeListFromAPI(for: category)
+                recipesArray = await service.loadRecipeListFromAPI(for: category)
             }
             .navigationDestination(for: RecipeRoute.self) { route in
                 SingleRecipeView(selectedSingleRecipe: route.mealID)

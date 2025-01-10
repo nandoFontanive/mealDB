@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct CategoriesView: View {
+    let recipeService: RecipeServiceProtocol
     @State private var categoriesArray: [CategoryObject] = []
     @State private var searchText: String = ""
     
@@ -36,7 +37,7 @@ struct CategoriesView: View {
                 }
             }
             .task {
-                categoriesArray = await RecipeService.loadCategoriesFromAPI()
+                categoriesArray = await recipeService.loadCategoriesFromAPI()
             }
             .navigationTitle("Categories")
             .searchable(text: $searchText, prompt: "Search for categories here")
@@ -45,8 +46,4 @@ struct CategoriesView: View {
             }
         }
     }
-}
-
-#Preview {
-    CategoriesView()
 }

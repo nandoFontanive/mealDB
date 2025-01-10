@@ -14,6 +14,7 @@ struct SingleRecipeView: View {
     @State private var singleRecipe: SingleRecipeObject? = nil
     
     let selectedSingleRecipe: String
+    let service = RecipeService()
     
     var body: some View {
         NavigationView {
@@ -89,7 +90,7 @@ struct SingleRecipeView: View {
                     ProgressView()
                         .onAppear {
                             Task {
-                                singleRecipe = await RecipeService.loadSingleRecipe(for: selectedSingleRecipe)
+                                singleRecipe = await service.loadSingleRecipe(for: selectedSingleRecipe)
                             }
                         }
                 }

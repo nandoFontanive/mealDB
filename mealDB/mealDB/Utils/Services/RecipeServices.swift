@@ -8,8 +8,14 @@
 import Foundation
 import SwiftUI
 
-struct RecipeService {
-    static func loadCategoriesFromAPI() async -> [CategoryObject] {
+protocol RecipeServiceProtocol {
+    func loadCategoriesFromAPI() async -> [CategoryObject]
+    func loadRecipeListFromAPI(for category: String) async -> [RecipeObject]
+    func loadSingleRecipe(for selectedSingleRecipe: String) async -> SingleRecipeObject?
+}
+
+struct RecipeService: RecipeServiceProtocol {
+    func loadCategoriesFromAPI() async -> [CategoryObject] {
         guard let url = URL(string: "https://www.themealdb.com/api/json/v1/1/categories.php")
         else {
             print("Error: could not load categories")
@@ -26,7 +32,7 @@ struct RecipeService {
         return []
     }
     
-    static func loadRecipeListFromAPI(for category: String) async -> [RecipeObject] {
+    func loadRecipeListFromAPI(for category: String) async -> [RecipeObject] {
         guard let urlRecipeList = URL(string: "https://www.themealdb.com/api/json/v1/1/filter.php?c=\(category)")
         else {
             print("Error: could not load recipes list by category")
@@ -43,7 +49,7 @@ struct RecipeService {
         return []
     }
     
-    static func loadSingleRecipe(for selectedSingleRecipe: String) async -> SingleRecipeObject? {
+    func loadSingleRecipe(for selectedSingleRecipe: String) async -> SingleRecipeObject? {
         guard let urlSingleRecipe = URL(string: "https://www.themealdb.com/api/json/v1/1/lookup.php?i=\(selectedSingleRecipe)")
         else {
             print("Error: could not load single recipe data")

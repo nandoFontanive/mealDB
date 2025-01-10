@@ -8,16 +8,29 @@
 import Foundation
 import SwiftUI
 
-class Favorites: ObservableObject {
-    @Published private var recipeIDs: Set<String> = []
+protocol FavoritesProtocol: AnyObject {
+    var recipeIDs: Set<String> { get set }
+    var favoriteRecipes: [RecipeObject] { get set }
+    func contains(_ recipeID: String) -> Bool
+    func add(_ recipeID: String)
+    func remove(_ recipeID: String)
+    func listAll() -> Set<String>
+    func loadDataFromUserDefaults()
+    func reloadFavoritedRecipes() async
+}
+
+class Favorites: ObservableObject, FavoritesProtocol {
+    @Published var recipeIDs: Set<String> = []
     @Published var favoriteRecipes: [RecipeObject] = []
-    
+
     private let key = "Favorites"
+    private let recipeService: RecipeServiceProtocol
     
-    init() {
+    init(recipeService: RecipeServiceProtocol) {
+        self.recipeService = recipeService
         loadDataFromUserDefaults()
     }
-    
+
     func contains(_ recipeID: String) -> Bool {
         recipeIDs.contains(recipeID)
     }
@@ -50,7 +63,7 @@ class Favorites: ObservableObject {
             favoriteRecipes.removeAll()
         }
         for favoritedMealID in recipeIDs {
-                if let singlefavoritedRecipe = await RecipeService.loadSingleRecipe(for: favoritedMealID) {
+                if let singlefavoritedRecipe = await recipeService.loadSingleRecipe(for: favoritedMealID) {
                     let favoritedRecipesObject = RecipeObject(
                         idMeal: singlefavoritedRecipe.idMeal,
                         strMeal: singlefavoritedRecipe.strMeal,
