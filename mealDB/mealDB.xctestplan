@@ -1,0 +1,29 @@
+{
+  "configurations" : [
+    {
+      "id" : "01003EB0-5C4B-426A-BA76-455A1F315918",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:mealDB.xcodeproj",
+      "identifier" : "20047CC52D0793090020B570",
+      "name" : "mealDB"
+    }
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:mealDB.xcodeproj",
+        "identifier" : "20BD610B2D316BB700271884",
+        "name" : "MealDBTests"
+      }
+    }
+  ],
+  "version" : 1
+}
