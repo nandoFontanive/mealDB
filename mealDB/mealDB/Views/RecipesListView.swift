@@ -13,6 +13,7 @@ struct RecipesListView: View {
     @State private var recipesArray: [RecipeObject] = []
     
     let category: String
+    let recipeService: RecipeServiceProtocol
     
     var body: some View {
         List(recipesArray) { recipe in
@@ -49,7 +50,7 @@ struct RecipesListView: View {
         .navigationTitle(category)
         .onAppear {
             Task {
-                recipesArray = await RecipeService.loadRecipeListFromAPI(for: category)
+                recipesArray = await recipeService.loadRecipeListFromAPI(for: category)
             }
         }
         .sheet(item: $selectedRecipe) { route in

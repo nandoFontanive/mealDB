@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct ContentView: View {
-    @StateObject private var favorites = Favorites()
+    @StateObject private var favorites = Favorites(recipeService: RecipeService())
+    private let recipeService = RecipeService()
     
     init() {
         customizeTabBarAppearance()
@@ -16,12 +17,12 @@ struct ContentView: View {
     
     var body: some View {
         TabView {
-            CategoriesView()
+            CategoriesView(recipeService: RecipeService())
                 .tabItem {
                     Label("Categories", systemImage: "square.grid.2x2.fill")
                 }
             
-            RecipesListView(category: "Miscellaneous")
+            RecipesListView(category: "Miscellaneous", recipeService: RecipeService())
                 .tabItem {
                     Label("Recipes", systemImage: "fork.knife")
                 }
