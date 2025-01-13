@@ -7,11 +7,12 @@
 
 import Foundation
 import UIKit
+import SwiftUICore
 
 func customizeTabBarAppearance() {
     let appearance = UITabBarAppearance()
     appearance.configureWithOpaqueBackground()
-    appearance.backgroundColor = UIColor.white
+    appearance.backgroundColor = UIColor.appBackground
     UITabBar.appearance().standardAppearance = appearance
     UITabBar.appearance().scrollEdgeAppearance = appearance
 }
