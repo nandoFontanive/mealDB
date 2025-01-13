@@ -39,7 +39,7 @@ struct RecipeCardView: View {
             Text(recipe.strMeal)
                 .font(.title3)
                 .bold()
-                .foregroundColor(.white)
+                .foregroundStyle(Color.appPrimary)
                 .padding(.horizontal, AppSizes.paddingMedium)
                 .padding(.vertical, AppSizes.paddingTiny)
                 .padding(.top, AppSizes.paddingHuge)

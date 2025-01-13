@@ -38,6 +38,7 @@ struct SingleRecipeView: View {
                             HStack {
                                 Text("\(singleRecipe.strMeal)")
                                     .font(.callout)
+                                    .foregroundStyle(Color.appSecondary)
                                 Spacer()
                                 
                                 Button {
@@ -54,17 +55,20 @@ struct SingleRecipeView: View {
                             .padding()
                             
                             List {
-                                Section("Ingredients") {
+                                Section {
                                     ForEach(singleRecipe.recipeIngredients.ingredients.indices, id: \.self) { index in
                                         HStack {
                                             Text(singleRecipe.recipeIngredients.ingredients[index].ingredient)
-                                                .foregroundColor(.primary)
+                                                .foregroundColor(Color.appPrimaryColor)
                                             Spacer()
                                             Text(singleRecipe.recipeIngredients.ingredients[index].measure)
-                                                .foregroundColor(.secondary)
+                                                .foregroundColor(Color.appSecondaryColor)
                                         }
                                         .padding(.vertical, AppSizes.paddingTiny)
                                     }
+                                }   header: {
+                                    Text("Ingredients")
+                                        .foregroundStyle(Color.appSecondaryColor)
                                 }
                                 
                                 
@@ -100,12 +104,14 @@ struct SingleRecipeView: View {
                 ToolbarItem(placement: .principal) {
                     Text("Recipe")
                         .font(.headline)
+                        .foregroundStyle(Color.appPrimary)
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Done") {
                         dismissSingleRecipeView()
                     }
                     .font(.headline)
+                    .foregroundStyle(Color.appOrange)
                 }
             }
         }

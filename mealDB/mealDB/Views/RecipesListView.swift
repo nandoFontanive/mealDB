@@ -32,6 +32,7 @@ struct RecipesListView: View {
                     .clipShape(RoundedRectangle(cornerRadius: CornerRadiusConfiguration.normalCornerRadius))
                     Text(recipe.strMeal)
                         .font(.headline)
+                        .foregroundStyle(Color.appPrimary)
                     
                     Spacer()
                     

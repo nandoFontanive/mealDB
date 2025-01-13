@@ -39,6 +39,7 @@ struct FavoritesView: View {
                         
                         Text(recipe.strMeal)
                             .font(.headline)
+                            .foregroundStyle(Color.appPrimary)
                         
                         Spacer()
                         
